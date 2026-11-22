@@ -37,7 +37,7 @@
 <tr><td align="center">Kế hoạch học trong ngày</td><td align="center">Mỗi từ một khung cảnh</td></tr>
 </table>
 
-<sub>Ảnh chụp thực tế của bản mã nguồn mở. Ảnh đầu trang là tranh concept của thương hiệu.</sub>
+<sub>Ảnh chụp thực tế của bản tiếng Việt, tạo lại bằng <code>node scripts/render-cards.mjs --app &lt;url&gt;</code>. Ảnh đầu trang là banner được dựng từ chính bộ dữ liệu.</sub>
 
 ### Những từ đã học hợp thành bầu trời sao của riêng bạn
 
@@ -135,14 +135,18 @@ b2_environment = [w for w in words if w["cefr"] == "B2" and w["topic"] == "envir
   "w": "principle",
   "uk": "/ˈprɪnsəpəl/",
   "us": "/ˈprɪnsəpəl/",
-  "senses": [{ "pos": "n.", "vi": "nguyên tắc; chuẩn mực hành xử", "en": "A belief or rule that guides decisions and behaviour." }],
-  "ex": [
-    { "en": "I refused the extra money as a matter of principle.", "vi": "Tôi từ chối khoản tiền thêm đó vì nguyên tắc." },
-    { "en": "The principle of equal opportunity should guide policies designed to improve access to higher education.", "vi": "Nguyên tắc cơ hội bình đẳng cần định hướng các chính sách nhằm mở rộng khả năng tiếp cận giáo dục đại học." }
+  "senses": [
+    { "pos": "n.", "vi": "nguyên tắc; chuẩn mực ứng xử", "en": "A belief or rule that guides decisions and behaviour." },
+    { "pos": "n.", "vi": "nguyên lý; quy luật cơ bản", "en": "A basic truth explaining how something works." }
   ],
-  "col": ["in principle|về nguyên tắc", "basic principle|nguyên tắc cơ bản"],
-  "fam": ["principled (adj.)"],
-  "tip": "principle là nguyên tắc; principal là hiệu trưởng hoặc chính, chủ yếu.",
+  "ex": [
+    { "en": "I refused the extra money as a matter of principle.", "vi": "Tôi từ chối khoản tiền được đưa thêm vì nguyên tắc của mình." },
+    { "en": "The principle of equal opportunity should guide policies designed to improve access to higher education.", "vi": "Các chính sách nhằm mở rộng cơ hội tiếp cận giáo dục đại học cần dựa trên nguyên tắc bình đẳng về cơ hội." }
+  ],
+  "col": ["basic principle|nguyên tắc cơ bản; nguyên lý cơ bản", "in principle|về nguyên tắc"],
+  "fam": ["principled (adj.)", "unprincipled (adj.)"],
+  "syn": ["rule", "standard", "doctrine"],
+  "tip": "\"Principle\" có nghĩa là nguyên tắc hoặc nguyên lý, còn \"principal\" phát âm giống hệt nhưng có thể nghĩa là chính hoặc hiệu trưởng.",
   "cefr": "B2",
   "topic": "thinking"
 }

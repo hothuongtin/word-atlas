@@ -122,13 +122,25 @@ if (app) {
     ["today-mobile", "#/", 390, 844],
     ["atlas-mobile", "#/atlas", 390, 844],
     ["word-mobile", `#/atlas?w=${pick(1, 41)[0][0]}`, 390, 844],
+    ["galaxy", "#/atlas?view=galaxy", 1440, 900, true],
   ];
-  for (const [name, hash, w, h] of views) {
+  // A learner a few weeks in, so the galaxy has lit stars.
+  const lit = index.words.filter((w, i) => w[4] <= 2 && i % 3 === 0).slice(0, 640).map((w) => w[0]);
+  for (const [name, hash, w, h, seeded] of views) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 2, colorScheme: "light" });
     const page = await ctx.newPage();
-    await page.addInitScript(() => localStorage.setItem("word-atlas:settings", JSON.stringify({ onboarded: true, startLevel: 2, splash: false })));
+    await page.addInitScript(
+      ([ids]) => {
+        localStorage.setItem("word-atlas:settings", JSON.stringify({ onboarded: true, startLevel: 2, splash: false }));
+        if (!ids.length) return;
+        const now = Date.now();
+        const cards = Object.fromEntries(ids.map((id, i) => [id, { due: now + (1 + (i % 9)) * 86400000, s: i % 3 ? 8 : 40, d: 5, el: 3, sd: 6, ls: 0, reps: 4, lapses: 0, st: 2, seen: now - (10 + (i % 20)) * 86400000 }]));
+        localStorage.setItem("word-atlas:v2:word-atlas-open", JSON.stringify({ version: 2, datasetId: "word-atlas-open", cards, bookmarks: [], days: {}, typing: [], session: null, mistakes: [] }));
+      },
+      [seeded ? lit : []],
+    );
     await page.goto(new URL(hash, app).href, { waitUntil: "networkidle" });
-    await page.waitForTimeout(1600);
+    await page.waitForTimeout(seeded ? 5000 : 1600);
     await page.screenshot({ path: path.join(root, `docs/assets/${name}.jpg`), type: "jpeg", quality: 86 });
     await ctx.close();
     console.log("wrote", `docs/assets/${name}.jpg`);

@@ -1,6 +1,6 @@
 {
-"files": 37728,
-"bytes": 718588631,
+"files": 37724,
+"bytes": 704318564,
 "items": [
 {
 "path": ".gitignore",
@@ -24,13 +24,13 @@
 },
 {
 "path": "README.en.md",
-"bytes": 8416,
-"sha256": "ca69e4a79d0257471fbb57d4ca2da8aa0b89b5c1c7b4b72c0aa2234098d77079"
+"bytes": 8817,
+"sha256": "770aecbd639c50f258a1629f9e282bb9cacbd90a79632e4ad7abcb0c4b232121"
 },
 {
 "path": "README.md",
-"bytes": 11296,
-"sha256": "08d2e611cf47d4ea84c84314566922b4d01632a9500dfb4745a88a0f4e77a57a"
+"bytes": 11705,
+"sha256": "6712827db9018d4e11d2adcb3582e57db242e03229477d5a88d6c5badc349c15"
 },
 {
 "path": "SECURITY.md",
@@ -68,34 +68,14 @@
 "sha256": "f19355c9c945791c68970553bc51117b6ebcafa5090318d567befed8522bb68c"
 },
 {
-"path": "docs/assets/cover-v2.jpg",
-"bytes": 649890,
-"sha256": "6c4d2946eaf84792196a1728377b47d9d2a669ac734b402e32210aa78591c464"
-},
-{
 "path": "docs/assets/demo.mp4",
-"bytes": 19922963,
-"sha256": "7dd85a2223e636b63256c0b813f2dcaf55d88363c6035e82e92178726f2ef70c"
+"bytes": 15913089,
+"sha256": "6885b1de364314706e81e38d8a60f9c0274ed1ec11a4054321ea6abdc1a077f0"
 },
 {
 "path": "docs/assets/galaxy.jpg",
-"bytes": 124871,
-"sha256": "0a000bf792cbdf5511463f99c7b476cbac4ec2a47d708060c7f31fb8d0efaaba"
-},
-{
-"path": "docs/assets/launch-poster.jpg",
-"bytes": 90117,
-"sha256": "515f63db82ac563bb0e86052b8a885fd08f6e8f2e491a43962a86faa71bbd8fe"
-},
-{
-"path": "docs/assets/launch-preview.webp",
-"bytes": 1946522,
-"sha256": "ed02ece1511082d1d602144313aa7733b7aaab187212ce6ca82a9058a1e51dfe"
-},
-{
-"path": "docs/assets/launch.mp4",
-"bytes": 7763099,
-"sha256": "4f0908300c67c17c73d5ad5f6338e8fd21c83ab6cc5139bfb1647ce0b6bba14d"
+"bytes": 312706,
+"sha256": "9ddaa854903a82aac23094431b1c133b7d3e037901a5416654bc4c2ff778f9f8"
 },
 {
 "path": "docs/assets/mosaic.jpg",
@@ -188399,8 +188379,8 @@
 },
 {
 "path": "scripts/render-cards.mjs",
-"bytes": 9084,
-"sha256": "15332ef866b59db092203a6bc8210e80d8117ab6c72d648bad415517e740313a"
+"bytes": 9874,
+"sha256": "c97e9fcf6877038a319bf6e8eedd44fcc1d6e86c6f26a6ad30a6ac5e5f2b924b"
 },
 {
 "path": "src/App.tsx",
