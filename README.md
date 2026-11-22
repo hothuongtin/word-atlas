@@ -89,7 +89,7 @@ Toàn bộ tài nguyên nằm trong kho: tranh ở `public/atlas/img/`, bản gh
 Cần **Node.js 20+** và npm. Kho có đầy đủ ảnh và bản ghi âm nên lần tải đầu có thể mất một lúc.
 
 ```bash
-git clone --depth 1 https://github.com/hothuongtin/word-atlas.git
+git clone --depth 1 https://github.com/thuongtin/word-atlas.git
 cd word-atlas
 npm ci
 npm run dev
@@ -160,7 +160,7 @@ Nghĩa, câu ví dụ, tranh minh họa và bản ghi âm tiếng Anh do dự á
 
 Khi báo lỗi, hãy kèm **mã mục từ, các bước tái hiện và kết quả mong đợi**. Với đề xuất sửa nội dung, tham chiếu từ điển đáng tin cậy sẽ giúp kiểm tra nhanh hơn.
 
-- [Báo lỗi](https://github.com/hothuongtin/word-atlas/issues/new/choose): sửa mục từ, lỗi giao diện hoặc góp ý khi sử dụng.
+- [Báo lỗi](https://github.com/thuongtin/word-atlas/issues/new/choose): sửa mục từ, lỗi giao diện hoặc góp ý khi sử dụng.
 - [Hướng dẫn đóng góp](CONTRIBUTING.md): đồng bộ dữ liệu, quy chuẩn mã nguồn và kiểm tra trước khi gửi.
 - [Chính sách bảo mật](SECURITY.md): cách báo cáo vấn đề bảo mật.
 
@@ -174,6 +174,6 @@ Khi báo lỗi, hãy kèm **mã mục từ, các bước tái hiện và kết q
 
 ---
 
-Dựa trên Word Atlas của [@designfuchen](https://github.com/designfuchen). Bản tiếng Việt được duy trì tại https://github.com/hothuongtin/word-atlas.
+Dựa trên Word Atlas của [@designfuchen](https://github.com/designfuchen). Bản tiếng Việt được duy trì tại https://github.com/thuongtin/word-atlas.
 
 Nếu 7000 Từ IELTS hữu ích với bạn, hãy tặng một Star hoặc chia sẻ cho bạn bè đang học tiếng Anh.

@@ -1,6 +1,6 @@
 {
 "files": 37728,
-"bytes": 718588645,
+"bytes": 718588631,
 "items": [
 {
 "path": ".gitignore",
@@ -24,13 +24,13 @@
 },
 {
 "path": "README.en.md",
-"bytes": 8422,
-"sha256": "67cb322eeaf366ce6082f55d22241e5e498327b52fe3046893aec68a4e96d1c8"
+"bytes": 8416,
+"sha256": "ca69e4a79d0257471fbb57d4ca2da8aa0b89b5c1c7b4b72c0aa2234098d77079"
 },
 {
 "path": "README.md",
-"bytes": 11302,
-"sha256": "2bc62e11f530090e3d2c6b65b6b20c1e57aec60bc256728abe17287d3b9921f0"
+"bytes": 11296,
+"sha256": "08d2e611cf47d4ea84c84314566922b4d01632a9500dfb4745a88a0f4e77a57a"
 },
 {
 "path": "SECURITY.md",
@@ -188424,8 +188424,8 @@
 },
 {
 "path": "src/config.ts",
-"bytes": 524,
-"sha256": "6fecac2626a27b3afc1c67369f92fb8176279a5340ce58aa326efe7b808ccc08"
+"bytes": 522,
+"sha256": "19475e5780b03c56e923ee6967ee2a2ed6a64b3a5c042834b3f9f1dc25899833"
 },
 {
 "path": "src/galaxy/Galaxy.tsx",

@@ -66,7 +66,7 @@ Voice and ambience files are in `public/sfx/`: the splash voice line "Chào mừ
 Requires **Node.js 20+** and npm. This repository includes the full image and audio collection, so the initial download can take time.
 
 ```bash
-git clone --depth 1 https://github.com/hothuongtin/word-atlas.git
+git clone --depth 1 https://github.com/thuongtin/word-atlas.git
 cd word-atlas
 npm ci
 npm run dev
@@ -137,7 +137,7 @@ English text and illustrations were generated with AI, and voices were produced 
 
 Please include the **word ID, reproduction steps and expected result** when reporting a problem. For vocabulary corrections, reliable dictionary references are welcome.
 
-- [Report an issue](https://github.com/hothuongtin/word-atlas/issues/new/choose)
+- [Report an issue](https://github.com/thuongtin/word-atlas/issues/new/choose)
 - [Contribution guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 
@@ -151,6 +151,6 @@ Please include the **word ID, reproduction steps and expected result** when repo
 
 ---
 
-Based on Word Atlas by [@designfuchen](https://github.com/designfuchen). The Vietnamese edition is maintained at https://github.com/hothuongtin/word-atlas.
+Based on Word Atlas by [@designfuchen](https://github.com/designfuchen). The Vietnamese edition is maintained at https://github.com/thuongtin/word-atlas.
 
 If 7000 Từ IELTS helps you, consider starring the repository or sharing it with friends who are learning English.
