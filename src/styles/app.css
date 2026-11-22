@@ -2082,6 +2082,7 @@ code {
 
 .atlas-head {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 22px;
   align-items: end;
   margin-bottom: 22px;
@@ -2110,6 +2111,7 @@ code {
 }
 .search input {
   flex: 1;
+  min-width: 0;
   border: 0;
   outline: 0;
   background: none;
