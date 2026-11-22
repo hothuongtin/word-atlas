@@ -2,7 +2,8 @@
 
 Credentials come from the process environment or from files in the directory
 named by ATLAS_SECRETS (default ~/.config/word-atlas): sub2.env with
-SUB2_BASE_URL / SUB2_API_KEY, and elevenlabs.key. Nothing here prints or stores keys.
+SUB2_BASE_URL / SUB2_API_KEY, and elevenlabs.key. Without SUB2_* the standard
+OPENAI_API_KEY / OPENAI_BASE_URL variables are used. Nothing here prints or stores keys.
 """
 import json
 import os
@@ -30,6 +31,11 @@ def load_env():
     for name in ("SUB2_BASE_URL", "SUB2_API_KEY", "ELEVENLABS_API_KEY"):
         if os.environ.get(name):
             env[name] = os.environ[name]
+    # Plain OpenAI credentials work too: any OpenAI-compatible endpoint is accepted.
+    if not env.get("SUB2_API_KEY") and os.environ.get("OPENAI_API_KEY"):
+        env["SUB2_API_KEY"] = os.environ["OPENAI_API_KEY"]
+    if not env.get("SUB2_BASE_URL"):
+        env["SUB2_BASE_URL"] = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
     return env
 
 

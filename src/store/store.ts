@@ -300,12 +300,12 @@ export function importBackup(text: string): { ok: true; cards: number } | { ok: 
   try {
     data = JSON.parse(text);
   } catch {
-    return { ok: false, error: "文件不是有效的 JSON。" };
+    return { ok: false, error: "Tệp không phải JSON hợp lệ." };
   }
   if (!isObj(data) || data.app !== "word-atlas" || data.version !== 2 || !isObj(data.progress))
-    return { ok: false, error: "这不是词光的学习备份。" };
+    return { ok: false, error: "Đây không phải bản sao lưu tiến độ của ứng dụng này." };
   const id = state.progress.datasetId;
-  if (data.progress.datasetId !== id) return { ok: false, error: "备份来自另一个词库，请先切换到对应词库。" };
+  if (data.progress.datasetId !== id) return { ok: false, error: "Bản sao lưu thuộc bộ từ khác, hãy chuyển sang đúng bộ từ trước." };
   const progress = sanitizeProgress({ ...data.progress, session: null }, id);
   state = { ...state, progress, settings: { ...sanitizeSettings(data.settings), onboarded: true } };
   emit();

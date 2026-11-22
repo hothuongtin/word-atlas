@@ -20,11 +20,11 @@ import subprocess
 from common import FORGE, ROOT
 
 TOPICS = [
-    ("education", "教育"), ("work", "职场"), ("technology", "科技"), ("science", "科学"),
-    ("environment", "环境"), ("health", "健康"), ("society", "社会"), ("government", "政法"),
-    ("economy", "经济"), ("media", "媒体"), ("arts", "艺术"), ("travel", "旅行"),
-    ("city", "城市"), ("nature", "自然"), ("daily", "生活"), ("emotion", "情感"),
-    ("thinking", "思维"), ("sport", "运动"), ("history", "历史"),
+    ("education", "Giáo dục"), ("work", "Công việc"), ("technology", "Công nghệ"), ("science", "Khoa học"),
+    ("environment", "Môi trường"), ("health", "Sức khỏe"), ("society", "Xã hội"), ("government", "Chính trị"),
+    ("economy", "Kinh tế"), ("media", "Truyền thông"), ("arts", "Nghệ thuật"), ("travel", "Du lịch"),
+    ("city", "Đô thị"), ("nature", "Thiên nhiên"), ("daily", "Đời sống"), ("emotion", "Cảm xúc"),
+    ("thinking", "Tư duy"), ("sport", "Thể thao"), ("history", "Lịch sử"),
 ]
 TOPIC_INDEX = {k: i for i, (k, _) in enumerate(TOPICS)}
 CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"]
@@ -40,12 +40,12 @@ def slugify(word):
 
 def clean_entry(e):
     senses = [
-        {"pos": (s.get("pos") or "").strip(), "zh": (s.get("zh") or "").strip(), "en": (s.get("en") or "").strip()}
+        {"pos": (s.get("pos") or "").strip(), "vi": (s.get("vi") or "").strip(), "en": (s.get("en") or "").strip()}
         for s in (e.get("senses") or [])
-        if s.get("zh")
+        if s.get("vi")
     ][:3]
     ex = [
-        {"en": (x.get("en") or "").strip(), "zh": (x.get("zh") or "").strip()}
+        {"en": (x.get("en") or "").strip(), "vi": (x.get("vi") or "").strip()}
         for x in (e.get("ex") or [])
         if x.get("en")
     ][:2]
@@ -131,8 +131,8 @@ def main():
     for i, (c, m) in enumerate(zip(entries, flags)):
         c["m"] = m
         s0 = c["senses"][0]
-        zh = f'{s0["pos"]} {s0["zh"]}'.strip()
-        index.append([c["id"], c["w"], zh, c["uk"] or c["us"], CEFR.index(c["cefr"]), TOPIC_INDEX[c["topic"]], m])
+        gloss = f'{s0["pos"]} {s0["vi"]}'.strip()
+        index.append([c["id"], c["w"], gloss, c["uk"] or c["us"], CEFR.index(c["cefr"]), TOPIC_INDEX[c["topic"]], m])
 
     for n in range(0, len(entries), 100):
         chunk = [{k: v for k, v in c.items() if not k.startswith("_")} for c in entries[n : n + 100]]
@@ -150,7 +150,7 @@ def main():
         "chunk": 100,
         "topics": TOPICS,
         "cefr": CEFR,
-        "fields": ["id", "word", "zh", "ipa", "cefr", "topic", "media"],
+        "fields": ["id", "word", "vi", "ipa", "cefr", "topic", "media"],
         "words": index,
     }
     (PUB / "index.json").write_text(json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
@@ -160,15 +160,15 @@ def main():
     (DATA / "word-atlas.json").write_text(json.dumps(public, ensure_ascii=False, indent=1))
     with open(DATA / "word-atlas.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["id", "word", "ipa_uk", "ipa_us", "cefr", "topic", "meanings_zh", "definition_en",
-                    "example1_en", "example1_zh", "example2_en", "example2_zh", "collocations", "word_family",
-                    "synonyms", "antonyms", "tip_zh"])
+        w.writerow(["id", "word", "ipa_uk", "ipa_us", "cefr", "topic", "meanings_vi", "definition_en",
+                    "example1_en", "example1_vi", "example2_en", "example2_vi", "collocations", "word_family",
+                    "synonyms", "antonyms", "tip_vi"])
         for c in public:
-            ex = c["ex"] + [{"en": "", "zh": ""}] * (2 - len(c["ex"]))
+            ex = c["ex"] + [{"en": "", "vi": ""}] * (2 - len(c["ex"]))
             w.writerow([c["id"], c["w"], c["uk"], c["us"], c["cefr"], c["topic"],
-                        " | ".join(f'{s["pos"]} {s["zh"]}' for s in c["senses"]),
+                        " | ".join(f'{s["pos"]} {s["vi"]}' for s in c["senses"]),
                         " | ".join(s["en"] for s in c["senses"]),
-                        ex[0]["en"], ex[0]["zh"], ex[1]["en"], ex[1]["zh"],
+                        ex[0]["en"], ex[0]["vi"], ex[1]["en"], ex[1]["vi"],
                         " ; ".join(c["col"]), " ; ".join(c["fam"]), ", ".join(c["syn"]), ", ".join(c["ant"]), c["tip"]])
     (FORGE / "build-warnings.json").write_text(json.dumps(warnings, ensure_ascii=False, indent=1))
     print(json.dumps({k: meta[k] for k in ("count", "examples", "illustrated", "voiced")}), "warnings", len(warnings))
