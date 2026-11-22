@@ -9,6 +9,7 @@ Cần Node.js 20+, Python 3 có `numpy` và `scipy`, cùng `ffmpeg`. Chạy app 
 ```bash
 cd video
 npm ci
+(cd .. && npx playwright install chromium)   # Trình duyệt cho bước chụp, nếu máy chưa có
 node scripts/assets.mjs   # Chép tranh minh họa, ảnh thương hiệu và giọng chào từ app
 npm run capture           # Chụp màn hình và quay clip app (Playwright ở thư mục gốc)
 npm run music             # Tổng hợp nhạc nền vào public/music.wav
