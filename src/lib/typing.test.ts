@@ -41,7 +41,7 @@ test("case and equivalent smart punctuation are accepted, punctuation is still r
   assert.ok(!same("Its fine", "It's fine."));
   assert.ok(!same("cat ", "cat"));
   assert.deepEqual(typingDelta("", "Cat", "cat"), { total: 3, correct: 3 });
-  assert.equal(clean("Ａ—Ｂ"), "A-B");
+  assert.equal(clean("\uff21\u2014\uff22"), "A-B");
 });
 
 test("IME commits or multi-character replacements are assessed as one insertion", () => {
@@ -54,7 +54,7 @@ test("IME commits or multi-character replacements are assessed as one insertion"
     total: 0,
     correct: 0,
   });
-  assert.deepEqual(typingDelta("", "你好", "hello"), { total: 2, correct: 0 });
+  assert.deepEqual(typingDelta("", "ươ", "hello"), { total: 2, correct: 0 });
 });
 
 test("WPM uses five characters per word and excludes discarded error characters", () => {

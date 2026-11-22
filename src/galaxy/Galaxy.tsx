@@ -293,7 +293,7 @@ export function Galaxy({
         }}
         onWheel={onWheel}
         role="img"
-        aria-label={`词汇星图：${layout.n} 颗星，已点亮 ${lit} 颗。可拖动旋转、滚动缩放，点击星星打开词条。`}
+        aria-label={`Bầu trời từ vựng: ${layout.n} ngôi sao, đã thắp sáng ${lit}. Kéo để xoay, cuộn để phóng to, chạm vào sao để mở mục từ.`}
         tabIndex={0}
         onKeyDown={(e) => {
           const eng = engine.current;
@@ -322,34 +322,34 @@ export function Galaxy({
           <Illustration src={atlas.img(hover.ref, "thumb")} word={hover.ref.word} topic={hover.ref.topic} />
           <span>
             <b lang="en">{hover.ref.word}</b>
-            <small>{hover.ref.zh}</small>
+            <small>{hover.ref.vi}</small>
           </span>
         </button>
       )}
       <div className="galaxy-hud">
         <p>
-          <b>{lit.toLocaleString()}</b> / {layout.n.toLocaleString()} 颗星已点亮
+          <b>{lit.toLocaleString("vi-VN")}</b> / {layout.n.toLocaleString("vi-VN")} sao đã sáng
         </p>
         <ul className="galaxy-legend" aria-hidden="true">
           <li>
             <i className="lg-dust" />
-            未学
+            Chưa học
           </li>
           <li>
             <i className="lg-learning" />
-            学习中
+            Đang học
           </li>
           <li>
             <i className="lg-mastered" />
-            已掌握
+            Đã thuộc
           </li>
         </ul>
       </div>
       <div className="galaxy-controls">
-        <button className="icon-btn" onClick={() => engine.current && (engine.current.cam.dist = clampDist(engine.current.cam.dist * 0.8))} aria-label="放大">
+        <button className="icon-btn" onClick={() => engine.current && (engine.current.cam.dist = clampDist(engine.current.cam.dist * 0.8))} aria-label="Phóng to">
           <Plus size={18} />
         </button>
-        <button className="icon-btn" onClick={() => engine.current && (engine.current.cam.dist = clampDist(engine.current.cam.dist * 1.25))} aria-label="缩小">
+        <button className="icon-btn" onClick={() => engine.current && (engine.current.cam.dist = clampDist(engine.current.cam.dist * 1.25))} aria-label="Thu nhỏ">
           <Minus size={18} />
         </button>
         <button
@@ -359,7 +359,7 @@ export function Galaxy({
             engine.current?.replayIntro();
             if (store.get().settings.sfx) void cue("fly");
           }}
-          aria-label="回到全景"
+          aria-label="Về toàn cảnh"
         >
           <RotateCcw size={17} />
         </button>
@@ -374,15 +374,15 @@ export function Galaxy({
               if (store.get().settings.sfx) void cue("fly");
             }
           }}
-          aria-label="飞到一颗已点亮的星"
+          aria-label="Bay tới một ngôi sao đã sáng"
         >
           <Crosshair size={17} />
         </button>
-        <button className="icon-btn" onClick={() => canvas.current && shareGalaxy(canvas.current, lit, layout.n)} aria-label="分享我的星图">
+        <button className="icon-btn" onClick={() => canvas.current && shareGalaxy(canvas.current, lit, layout.n)} aria-label="Chia sẻ bầu trời của tôi">
           <Share2 size={17} />
         </button>
       </div>
-      <p className="galaxy-hint">拖动旋转 · 滚动缩放 · 点击星星打开词条</p>
+      <p className="galaxy-hint">Kéo để xoay · cuộn để phóng to · chạm vào sao để mở mục từ</p>
     </div>
   );
 }

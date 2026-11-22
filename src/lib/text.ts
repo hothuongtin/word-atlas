@@ -35,7 +35,7 @@ export const normalize = (s: string) =>
   s
     .normalize("NFKC")
     .replace(/[’‘]/g, "'")
-    .replace(/[‐‑–—]/g, "-")
+    .replace(/[\u2010\u2011\u2013\u2014]/g, "-")
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
@@ -57,10 +57,32 @@ export function hashSeed(s: string) {
   return h >>> 0;
 }
 
-/** Collocations are stored as "english｜中文". */
+/** Collocations are stored as "english|tiếng Việt" (older data used a full-width bar). */
 export const splitPair = (s: string) => {
-  const [en, zh] = s.split(/[｜|]/);
-  return { en: (en || "").trim(), zh: (zh || "").trim() };
+  const [en, vi] = s.split(/[｜|]/);
+  return { en: (en || "").trim(), vi: (vi || "").trim() };
 };
+
+/** Lowercase and drop Vietnamese diacritics, so "moi truong" finds "môi trường". */
+export const fold = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[đĐ]/g, "d")
+    .toLowerCase();
+
+/** The phrases of a gloss such as "n. thư; bức thư", without the part-of-speech label. */
+export const glossPhrases = (gloss: string) =>
+  gloss
+    .replace(/^[a-z]+\.\s+/, "")
+    .split(/[;,]/)
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+
+/** True when a Vietnamese input method (Telex, VNI) has turned typed English into accented letters. */
+export function imeInterference(typed: string, target: string) {
+  const want = target.normalize("NFC");
+  return Array.from(typed.normalize("NFC")).some((ch) => ch > "\u007f" && /\p{L}/u.test(ch) && !want.includes(ch));
+}
 
 export const plural = (n: number) => n.toLocaleString("en-US");

@@ -26,7 +26,8 @@ AMBIENT = {
     "voyage": "amb-voyage-0",
     "cafe": "amb-cafe-1",
 }
-# Splash: voice line (Jason Chen, eleven_v3, verified by speech-to-text) and door/burst effects.
+# Splash: door/burst effects. The Vietnamese voice lines are made and mastered by gen_voice_vi.py;
+# the voice entries below are the original ElevenLabs takes and are no longer published.
 SPLASH = {"splash-voice": ("splash/voice-jason-0", -16), "splash-door": ("splash/door-0", -21), "splash-burst": ("splash/burst-2", -22)}
 # Word galaxy: hover twinkle, camera flight, star ignition, two verified voice lines.
 GALAXY = {

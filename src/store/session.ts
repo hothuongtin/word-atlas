@@ -1,6 +1,6 @@
 import type { Atlas, WordRef } from "../atlas/types";
 import { MEDIA } from "../atlas/types";
-import { hashSeed, normalize, shuffle } from "../lib/text";
+import { glossPhrases, hashSeed, normalize, shuffle } from "../lib/text";
 import { isMastered, review, Rating, type Grade } from "./srs";
 import { bumpDay, dayKey, store, type ActiveSession, type Progress, type QuizKind, type Settings, type Step } from "./store";
 
@@ -52,21 +52,22 @@ function quizKind(ref: WordRef, p: Progress, s: Settings, salt: number): QuizKin
 /** Distractors that look plausible: same level, similar spelling or length, different meaning. */
 export function distractors(atlas: Atlas, ref: WordRef, kind: QuizKind, seed: number) {
   const target = normalize(ref.word);
-  const zhCore = ref.zh.replace(/^[a-z.]+\s*/, "").split(/[；;，,]/)[0];
+  const taken = new Set(glossPhrases(ref.vi));
   const scored: [number, WordRef][] = [];
   const pool = atlas.words;
   const start = Math.max(0, ref.order - 400);
   for (let i = start; i < Math.min(pool.length, ref.order + 400); i++) {
     const w = pool[i];
     if (w.id === ref.id || normalize(w.word) === target) continue;
-    if (zhCore && w.zh.includes(zhCore)) continue;
+    // A candidate that shares a whole phrase with the answer would be a second correct option.
+    if (glossPhrases(w.vi).some((p) => taken.has(p))) continue;
     let score = hashSeed(w.id + seed) % 100;
     if (kind === "listen" || kind === "picture") {
       if (w.word[0]?.toLowerCase() === target[0]) score += 120;
       score += Math.max(0, 60 - Math.abs(w.word.length - target.length) * 20);
     } else {
       if (w.cefr === ref.cefr) score += 40;
-      if (w.zh.split(" ")[0] === ref.zh.split(" ")[0]) score += 60; // same part of speech
+      if (w.vi.split(" ")[0] === ref.vi.split(" ")[0]) score += 60; // same part of speech
     }
     scored.push([score, w]);
   }
@@ -74,7 +75,7 @@ export function distractors(atlas: Atlas, ref: WordRef, kind: QuizKind, seed: nu
   const seen = new Set<string>();
   const picks: string[] = [];
   for (const [, w] of scored) {
-    const key = kind === "meaning" ? w.zh : normalize(w.word);
+    const key = kind === "meaning" ? w.vi : normalize(w.word);
     if (seen.has(key)) continue;
     seen.add(key);
     picks.push(w.id);

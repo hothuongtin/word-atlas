@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { gap, normalize, splitHighlight, splitPair } from "./text";
+import { fold, gap, glossPhrases, imeInterference, normalize, splitHighlight, splitPair } from "./text";
 
 test("highlights the headword and common inflections", () => {
   assert.deepEqual(splitHighlight("Training with a friend motivates me.", "motivate")?.[1], "motivates");
@@ -21,5 +21,24 @@ test("gaps the sentence for cloze questions", () => {
 
 test("normalizes typography from mobile keyboards", () => {
   assert.equal(normalize("  Don’t  "), "don't");
-  assert.deepEqual(splitPair("in principle｜原则上"), { en: "in principle", zh: "原则上" });
+  assert.deepEqual(splitPair("in principle|về nguyên tắc"), { en: "in principle", vi: "về nguyên tắc" });
+});
+
+test("folds Vietnamese diacritics for search", () => {
+  assert.equal(fold("Môi Trường"), "moi truong");
+  assert.equal(fold("Đường đi"), "duong di");
+  assert.equal(fold("thủy"), fold("thuỷ"));
+});
+
+test("splits a gloss into comparable phrases without the part of speech", () => {
+  assert.deepEqual(glossPhrases("n. nguyên tắc; chuẩn mực hành xử"), ["nguyên tắc", "chuẩn mực hành xử"]);
+  assert.deepEqual(glossPhrases("thư, lá thư"), ["thư", "lá thư"]);
+});
+
+test("detects a Vietnamese input method changing English keystrokes", () => {
+  assert.equal(imeInterference("ô", "book"), true);
+  assert.equal(imeInterference("đ", "dd"), true);
+  assert.equal(imeInterference("boo", "book"), false);
+  assert.equal(imeInterference("caf", "café"), false);
+  assert.equal(imeInterference("café", "café"), false);
 });

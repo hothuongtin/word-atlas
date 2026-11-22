@@ -4,7 +4,7 @@ export const clean = (text: string) =>
     .normalize("NFKC")
     .replace(/[’‘]/g, "'")
     .replace(/[“”]/g, '"')
-    .replace(/[‐‑–—]/g, "-")
+    .replace(/[\u2010\u2011\u2013\u2014]/g, "-")
     .replace(/\s/g, " ");
 export const same = (a: string, b: string) =>
   clean(a).toLowerCase() === clean(b).toLowerCase();

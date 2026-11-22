@@ -1,6 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { duck, playFile, preloadFiles } from "../lib/sound";
+import { APP_KICKER, APP_NAME } from "../config";
 import { dayKey, store } from "../store/store";
+import { Mark } from "./Logo";
 
 const SEEN_KEY = "word-atlas:splash";
 const PALETTE: [string, number][] = [
@@ -40,72 +48,72 @@ interface P {
 
 const ease = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 
-/** Sample bright pixels of the logo, the Chinese name and the wordmark as particle targets. */
-function targets(w: number, h: number, count: number) {
+/**
+ * Sample the compass mark (the same shapes as <Mark>, viewBox 32) drawn into `box`,
+ * so the dust gathers into exactly the emblem that then lights up on top of it.
+ */
+function targets(w: number, h: number, box: DOMRect, count: number) {
   const c = document.createElement("canvas");
   c.width = w;
   c.height = h;
-  const g = c.getContext("2d")!;
-  const s = Math.min(w, h);
-  const cx = w / 2;
-  const top = h * 0.5 - s * 0.3;
-  const R = s * 0.085;
-  const cy = top + R;
+  const g = c.getContext("2d", { willReadFrequently: true })!;
+  const k = box.width / 32;
+  g.setTransform(k, 0, 0, k, box.left, box.top);
   g.fillStyle = g.strokeStyle = "#fff";
-  g.lineWidth = Math.max(2, s * 0.006);
+  g.lineWidth = 1.5;
   g.beginPath();
-  g.arc(cx, cy, R, 0, Math.PI * 2);
+  g.arc(16, 16, 14.5, 0, Math.PI * 2);
   g.stroke();
+  g.lineWidth = 0.75;
+  g.setLineDash([1.2, 2.2]);
   g.beginPath();
-  g.moveTo(cx, cy - R * 0.9);
-  g.lineTo(cx + R * 0.3, cy);
-  g.lineTo(cx, cy + R * 0.9);
-  g.lineTo(cx - R * 0.3, cy);
-  g.closePath();
-  g.fill();
-  g.beginPath();
-  g.moveTo(cx - R * 0.62, cy);
-  g.lineTo(cx, cy - R * 0.1);
-  g.lineTo(cx + R * 0.62, cy);
-  g.lineTo(cx, cy + R * 0.1);
-  g.closePath();
-  g.fill();
-  const zh = Math.min(w * 0.3, s * 0.24);
-  g.font = `700 ${zh}px "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif`;
-  g.textAlign = "center";
-  g.textBaseline = "middle";
-  g.fillText("词光", cx, cy + R + zh * 0.78);
-  const en = Math.max(18, zh * 0.24);
-  g.font = `700 ${en}px "Fraunces Variable", Georgia, serif`;
-  g.letterSpacing = `${en * 0.34}px`;
-  g.fillText("WORD ATLAS", cx, cy + R + zh * 1.52);
+  g.arc(16, 16, 10.5, 0, Math.PI * 2);
+  g.stroke();
+  g.fill(new Path2D("M16 3.5 19 16 16 28.5 13 16Z"));
+  g.fill(new Path2D("M3.5 16 16 13.4 28.5 16 16 18.6Z"));
   const data = g.getImageData(0, 0, w, h).data;
   // Take every lit pixel, then a random subset: no visible sampling grid.
   const all: [number, number][] = [];
-  for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) if (data[(y * w + x) * 4 + 3] > 120) all.push([x, y]);
+  const x0 = Math.max(0, Math.floor(box.left));
+  const y0 = Math.max(0, Math.floor(box.top));
+  const x1 = Math.min(w, Math.ceil(box.right));
+  const y1 = Math.min(h, Math.ceil(box.bottom));
+  for (let y = y0; y < y1; y++)
+    for (let x = x0; x < x1; x++)
+      if (data[(y * w + x) * 4 + 3] > 100) all.push([x, y]);
   const pts: [number, number][] = [];
   for (let i = 0; i < count && all.length; i++) {
     const [x, y] = all[Math.floor(Math.random() * all.length)];
-    pts.push([x + Math.random() * 2, y + Math.random() * 2]);
+    pts.push([x + Math.random(), y + Math.random()]);
   }
-  return { pts, cy: cy + R, wordTop: cy + R + zh * 1.3 };
+  return pts;
 }
+
+/** The name split into words, each word one gradient-filled unit with its own reveal delay. */
+const WORDS = APP_NAME.normalize("NFC").split(" ");
 
 export function Splash({ onDone }: { onDone: () => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const emblem = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<"gather" | "ready" | "open">("gather");
   const opening = useRef(false);
-  const reduce = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduce =
+    typeof matchMedia !== "undefined" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
     preloadFiles(["splash-voice.mp3", "splash-door.mp3", "splash-burst.mp3"]);
-    const t = window.setTimeout(() => setPhase((p) => (p === "gather" ? "ready" : p)), reduce ? 300 : 2100);
+    const t = window.setTimeout(
+      () => setPhase((p) => (p === "gather" ? "ready" : p)),
+      reduce ? 300 : 2500,
+    );
     return () => window.clearTimeout(t);
   }, [reduce]);
 
   useEffect(() => {
     const cv = canvas.current;
-    if (!cv || reduce) return;
+    const em = emblem.current;
+    if (!cv || !em || reduce) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -113,18 +121,22 @@ export function Splash({ onDone }: { onDone: () => void }) {
     cv.height = h * dpr;
     const g = cv.getContext("2d")!;
     g.scale(dpr, dpr);
-    const N = w < 700 ? 2600 : 5200;
-    const { pts, wordTop } = targets(w, h, N);
+    // The emblem starts slightly scaled down; aim the dust at its final, unscaled size.
+    const r = em.getBoundingClientRect();
+    const ex = r.left + r.width / 2;
+    const ey = r.top + r.height / 2;
+    const size = em.offsetWidth;
+    const box = new DOMRect(ex - size / 2, ey - size / 2, size, size);
+    const N = w < 700 ? 1500 : 2400;
+    const pts = targets(w, h, box, N);
     const pick = (): string => {
       let r = Math.random();
       for (const [c, p] of PALETTE) if ((r -= p) <= 0) return c;
       return PALETTE[0][0];
     };
     const ps: P[] = [];
-    const cx = w / 2;
-    const cy = h / 2;
     for (let i = 0; i < N; i++) {
-      const [tx, ty] = pts.length ? pts[i % pts.length] : [cx, cy];
+      const [tx, ty] = pts.length ? pts[i % pts.length] : [ex, ey];
       // Start as a drifting dust cloud across (and slightly beyond) the screen.
       const sx = -0.1 * w + Math.random() * 1.2 * w;
       const sy = -0.1 * h + Math.random() * 1.2 * h;
@@ -133,19 +145,26 @@ export function Splash({ onDone }: { onDone: () => void }) {
         y: sy,
         sx,
         sy,
-        tx: tx + (Math.random() - 0.5) * 1.2,
-        ty: ty + (Math.random() - 0.5) * 1.2,
+        tx,
+        ty,
         vx: 0,
         vy: 0,
         c: pick(),
-        // A few large glowing grains, but keep the small wordmark crisp.
-        r: ty < wordTop && Math.random() < 0.06 ? 2.2 + Math.random() * 1.4 : 0.7 + Math.random() * 1.2,
-        d: Math.random() * 0.55,
+        r:
+          Math.random() < 0.05
+            ? 2.2 + Math.random() * 1.4
+            : 0.6 + Math.random() * 1.1,
+        d: Math.random() * 0.4,
         a: 0.55 + Math.random() * 0.45,
         tw: Math.random() * Math.PI * 2,
       });
     }
-    const stars = Array.from({ length: Math.round((w * h) / 9000) }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 0.9 + 0.2, tw: Math.random() * 6 }));
+    const stars = Array.from({ length: Math.round((w * h) / 9000) }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 0.9 + 0.2,
+      tw: Math.random() * 6,
+    }));
     let raf = 0;
     const t0 = performance.now();
     let openAt = 0;
@@ -159,16 +178,20 @@ export function Splash({ onDone }: { onDone: () => void }) {
       }
       if (opening.current && !openAt) {
         openAt = t;
+        // Burst outward from the compass as the doors open.
         for (const p of ps) {
-          const dx = p.x - cx;
-          const dy = p.y - cy * 0.95;
+          const dx = p.x - ex;
+          const dy = p.y - ey;
           const len = Math.hypot(dx, dy) || 1;
           const sp = 4 + Math.random() * 9;
           p.vx = (dx / len) * sp + (Math.random() - 0.5) * 3;
           p.vy = (dy / len) * sp + (Math.random() - 0.5) * 3 - 1;
         }
       }
-      const fade = openAt ? Math.max(0, 1 - (t - openAt) / 1.1) : 1;
+      // Once the crisp emblem has lit up, the dust fades to a faint shimmer so the compass reads clean.
+      const level = openAt
+        ? Math.max(0, 1 - (t - openAt) / 1.1)
+        : 1 - 0.9 * ease((t - 1.5) / 0.9);
       for (const p of ps) {
         if (openAt) {
           p.x += p.vx;
@@ -176,7 +199,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
           p.vx *= 0.985;
           p.vy = p.vy * 0.985 + 0.04;
         } else {
-          const k = ease((t - 0.15 - p.d) / 1.7);
+          const k = ease((t - 0.1 - p.d) / 1.4);
           // Spiral in: the swirl offset shrinks as the particle arrives.
           const sw = (1 - k) * (90 + p.tw * 12);
           const ang = (1 - k) * 3.2 + p.tw;
@@ -188,7 +211,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
           }
         }
         const twinkle = 0.75 + 0.25 * Math.sin(t * 3 + p.tw * 3);
-        const alpha = p.a * twinkle * fade;
+        const alpha = p.a * twinkle * level;
         if (p.r > 2) {
           g.fillStyle = `rgba(${p.c},${alpha * 0.12})`;
           g.beginPath();
@@ -237,22 +260,45 @@ export function Splash({ onDone }: { onDone: () => void }) {
   }); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className={`splash is-${phase} ${reduce ? "is-reduced" : ""}`} onClick={() => open()} role="dialog" aria-label="欢迎打开雅思大门，点击进入">
+    <div
+      className={`splash is-${phase} ${reduce ? "is-reduced" : ""}`}
+      onClick={() => open()}
+      role="dialog"
+      aria-label="Chào mừng bạn mở cánh cửa IELTS, chạm để vào"
+    >
       <div className="door door-l" />
       <div className="door door-r" />
       <div className="splash-light" />
       <canvas ref={canvas} className="splash-canvas" aria-hidden="true" />
-      {reduce && (
-        <div className="splash-static">
-          <b>词光</b>
-          <small>WORD ATLAS</small>
+      <div className="splash-brand">
+        <div className="splash-emblem" ref={emblem}>
+          <Mark size={32} />
         </div>
-      )}
+        <p className="splash-name" aria-label={APP_NAME}>
+          {WORDS.map((word, i) => (
+            <Fragment key={i}>
+              {i > 0 && " "}
+              <span
+                className="splash-word"
+                aria-hidden="true"
+                style={{ "--i": i } as CSSProperties}
+              >
+                {word}
+              </span>
+            </Fragment>
+          ))}
+        </p>
+        <p className="splash-kicker">
+          <i />
+          {APP_KICKER}
+          <i />
+        </p>
+      </div>
       <div className="splash-copy">
-        <p className="splash-tag">欢迎打开雅思大门</p>
+        <p className="splash-tag">Chào mừng bạn mở cánh cửa IELTS</p>
         <p className="splash-hint">
           <span className="splash-key" />
-          点击开启 · 按任意键
+          Chạm để mở · hoặc nhấn phím bất kỳ
         </p>
       </div>
       <button
@@ -262,7 +308,7 @@ export function Splash({ onDone }: { onDone: () => void }) {
           open(false);
         }}
       >
-        跳过
+        Bỏ qua
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 import { ArrowUpRight, Database, Github, Heart } from "lucide-react";
 import { useAtlas } from "../atlas/context";
-import { REPO_URL } from "../config";
+import { APP_NAME, APP_TAGLINE, REPO_URL, UPSTREAM_URL } from "../config";
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -11,18 +11,18 @@ export function About() {
       <header className="about-hero">
         <img src={`${BASE}brand/og.webp`} alt="" />
         <div>
-          <p className="eyebrow">关于词光</p>
-          <h1 className="display">一词一画，点亮雅思。</h1>
+          <p className="eyebrow">Giới thiệu {APP_NAME}</p>
+          <h1 className="display">{APP_TAGLINE}.</h1>
           <p className="lede">
-            词光把雅思阅读 8000 词整理成 {atlas.count.toLocaleString()} 个词条。每个词一幅原创插画，一句日常例句，一句雅思例句，配英美发音、常用搭配和易混提示。学会一个，就在你的星图上点亮一颗星。
+            {APP_NAME} sắp xếp vốn từ đọc hiểu IELTS thành {atlas.count.toLocaleString("vi-VN")} mục từ. Mỗi từ có một bức tranh minh họa, một câu ví dụ đời thường, một câu ví dụ theo ngữ cảnh IELTS, kèm phát âm Anh - Mỹ, cụm từ thường gặp và mẹo tránh nhầm lẫn dành cho người Việt. Thuộc một từ, bầu trời của bạn sáng thêm một ngôi sao.
           </p>
-          <p className="lede">它免费、开源、无需注册。代码用 MIT，词库用 CC BY 4.0，谁都可以拿去用。</p>
+          <p className="lede">Miễn phí, mã nguồn mở, không cần đăng ký. Mã nguồn theo giấy phép MIT, bộ từ theo CC BY 4.0, ai cũng có thể dùng lại.</p>
           <div className="about-actions">
             <a className="btn btn-primary" href={REPO_URL} target="_blank" rel="noreferrer">
-              <Github size={18} /> 在 GitHub 上查看
+              <Github size={18} /> Xem trên GitHub
             </a>
             <a className="btn btn-ghost" href={`${REPO_URL}/tree/main/data`} target="_blank" rel="noreferrer">
-              <Database size={18} /> 下载词库 JSON / CSV
+              <Database size={18} /> Tải bộ từ JSON / CSV
             </a>
           </div>
         </div>
@@ -30,83 +30,87 @@ export function About() {
 
       <div className="about-grid">
         <section className="panel">
-          <h3 className="eyebrow">为什么记得住</h3>
+          <h3 className="eyebrow">Vì sao nhớ lâu</h3>
           <ul className="feature-list">
             <li>
-              <b>先看见。</b>每个词都有一幅画，画的就是第一句例句里发生的事。
+              <b>Nhìn thấy trước.</b> Mỗi từ có một bức tranh, vẽ đúng điều xảy ra trong câu ví dụ đầu tiên.
             </li>
             <li>
-              <b>再想起。</b>选义、看图补句、听音辨词、拼写，从认得走到会写。
+              <b>Rồi tự nhớ lại.</b> Chọn nghĩa, nhìn tranh điền câu, nghe đoán từ, đánh vần: đi từ nhận ra đến viết được.
             </li>
             <li>
-              <b>刚好在快忘时重逢。</b>FSRS 是新版 Anki 用的开源记忆算法，只在你快要遗忘时安排复习。
+              <b>Gặp lại đúng lúc sắp quên.</b> FSRS là thuật toán ghi nhớ mã nguồn mở mà Anki bản mới đang dùng, chỉ xếp lịch ôn khi bạn sắp quên.
             </li>
             <li>
-              <b>分数诚实。</b>只算第一次作答。答错的词会换个题型再见一面，但不会抬高正确率。
+              <b>Điểm số trung thực.</b> Chỉ tính lần trả lời đầu tiên. Từ trả lời sai sẽ quay lại dưới dạng bài khác, nhưng không làm tăng tỉ lệ đúng.
             </li>
             <li>
-              <b>进度只属于你。</b>没有账号，没有服务器，数据存在你的浏览器里，随时能导出。
+              <b>Tiến độ là của riêng bạn.</b> Không tài khoản, không máy chủ, dữ liệu nằm trong trình duyệt của bạn và xuất ra được bất cứ lúc nào.
             </li>
           </ul>
         </section>
 
         <section className="panel">
-          <h3 className="eyebrow">快捷键</h3>
+          <h3 className="eyebrow">Phím tắt</h3>
           <dl className="keys">
             <div>
               <dt>
                 <kbd>⌘</kbd>
-                <kbd>K</kbd> 或 <kbd>/</kbd>
+                <kbd>K</kbd> hoặc <kbd>/</kbd>
               </dt>
-              <dd>搜索任何词</dd>
+              <dd>Tìm một từ bất kỳ</dd>
             </div>
             <div>
               <dt>
                 <kbd>1</kbd>–<kbd>4</kbd>
               </dt>
-              <dd>选择答案</dd>
+              <dd>Chọn đáp án</dd>
             </div>
             <div>
               <dt>
                 <kbd>Enter</kbd>
               </dt>
-              <dd>确认 / 继续</dd>
+              <dd>Xác nhận / tiếp tục</dd>
             </div>
             <div>
               <dt>
                 <kbd>←</kbd> <kbd>→</kbd>
               </dt>
-              <dd>词卡里切换上一个、下一个</dd>
+              <dd>Chuyển từ trước, từ sau trong thẻ từ</dd>
             </div>
             <div>
               <dt>
                 <kbd>Esc</kbd>
               </dt>
-              <dd>关闭弹窗</dd>
+              <dd>Đóng cửa sổ</dd>
             </div>
           </dl>
         </section>
 
         <section className="panel">
-          <h3 className="eyebrow">内容从哪里来</h3>
+          <h3 className="eyebrow">Nội dung đến từ đâu</h3>
           <p className="muted">
-            释义、例句、搭配和提示由大语言模型按统一的词典规范重新撰写；插画由图像模型按统一画风逐词绘制；发音和朗读由 ElevenLabs 合成（英音 Alice，美音 Sarah）。所有内容都经过结构和一致性的自动校验，但没有逐条人工审校。看到错的地方，欢迎在 GitHub 提 Issue，或者直接改数据提 PR。
+            Phần tiếng Anh (định nghĩa, câu ví dụ, cụm từ), tranh minh họa và giọng đọc đến từ dự án mở{" "}
+            <a className="link" href={UPSTREAM_URL} target="_blank" rel="noreferrer">
+              Word Atlas
+            </a>{" "}
+            (CC BY 4.0, Word Atlas contributors): chữ do mô hình ngôn ngữ lớn soạn theo một chuẩn từ điển thống nhất, tranh do mô hình tạo ảnh vẽ, giọng đọc do ElevenLabs tổng hợp (giọng Anh Alice, giọng Mỹ Sarah). Phần tiếng Việt (nghĩa, bản dịch câu ví dụ, mẹo) được mô hình ngôn ngữ lớn viết lại từ nội dung tiếng Anh cho người học Việt Nam. Mọi nội dung đều qua kiểm tra tự động về cấu trúc và tính nhất quán, nhưng chưa được con người duyệt từng mục. Thấy chỗ sai, bạn hãy mở Issue trên GitHub hoặc sửa dữ liệu rồi gửi PR.
           </p>
-          <p className="muted">词光不是官方雅思词表，也不承诺提分。它只想把背单词这件事，做得好看一点、扎实一点。</p>
+          <p className="muted">{APP_NAME} không phải danh sách từ chính thức của IELTS, không liên kết với các đơn vị tổ chức kỳ thi IELTS và không cam kết tăng điểm. Ứng dụng chỉ muốn việc học từ vựng đẹp hơn và chắc hơn một chút.</p>
         </section>
 
         <section className="panel">
-          <h3 className="eyebrow">给开发者</h3>
+          <h3 className="eyebrow">Dành cho lập trình viên</h3>
           <p className="muted">
-            <code>data/word-atlas.json</code> 和 <code>.csv</code> 是完整词库；<code>public/atlas</code> 里是网页用的分块数据、插画和音频。拿去做 Anki 牌组、背词小程序、浏览器插件，或者 AI 应用的评测集，署名即可。
+            <code>data/word-atlas.json</code> và <code>.csv</code> là bộ từ đầy đủ; <code>public/atlas</code> chứa dữ liệu chia khối, tranh và âm thanh cho bản web. Bạn có thể dùng để làm bộ thẻ Anki, ứng dụng học từ, tiện ích trình duyệt hoặc bộ đánh giá cho ứng dụng AI, chỉ cần ghi nguồn.
           </p>
           <a className="link" href={`${REPO_URL}#readme`} target="_blank" rel="noreferrer">
-            阅读文档 <ArrowUpRight size={14} />
+            Đọc tài liệu <ArrowUpRight size={14} />
           </a>
         </section>
       </div>
       <p className="colophon">
-        <Heart size={14} /> 做给每一个在背单词的人。
+        <Heart size={14} /> Dành cho tất cả những ai đang học từ vựng.
       </p>
     </div>
   );

@@ -1,14 +1,14 @@
-# 部署 / Deployment
+# Triển khai / Deployment
 
-`npm run build` 生成纯静态站点 `dist/`，可以放到任何静态托管（Nginx、Cloudflare Pages、Vercel、GitHub Pages）。
+`npm run build` tạo ra một trang tĩnh thuần trong `dist/`, có thể đặt trên bất kỳ dịch vụ lưu trữ tĩnh nào (Nginx, Cloudflare Pages, Vercel, GitHub Pages).
 
-## 子路径
+## Đường dẫn con
 
 ```bash
 ATLAS_BASE=/words/ npm run build
 ```
 
-## Nginx 示例
+## Ví dụ Nginx
 
 ```nginx
 location ^~ /words/ {
@@ -20,8 +20,8 @@ location ^~ /words/ {
 
 ## GitHub Pages
 
-仓库带有 `.github/workflows/pages.yml`。在仓库 Settings → Pages 选择 “GitHub Actions”，然后手动运行 “Deploy to GitHub Pages”。
+Kho có sẵn `.github/workflows/pages.yml`. Vào Settings → Pages của kho, chọn “GitHub Actions”, rồi chạy thủ công “Deploy to GitHub Pages”.
 
-## 体积
+## Dung lượng
 
-插画与音频合计约数百 MB。建议在 CDN 后部署，或按需只发布 `thumb/` 和部分音频。
+Tranh minh họa và âm thanh cộng lại khoảng vài trăm MB. Nên triển khai phía sau CDN, hoặc chỉ đưa lên `thumb/` và một phần âm thanh tùy theo nhu cầu.
