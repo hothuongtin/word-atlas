@@ -1,6 +1,6 @@
 # Video giới thiệu 7000 Từ IELTS
 
-Video Full HD (1920×1080, 30 fps, 62 giây) giới thiệu app cho người học Việt Nam, dựng bằng [Remotion](https://www.remotion.dev/). Nhạc nền được tổng hợp hoàn toàn bằng code trong `scripts/music.py` (96 BPM, giọng Rê trưởng), không dùng nhạc có sẵn.
+Video Full HD (1920×1080, 30 fps, khoảng 2 phút 10 giây) giới thiệu app cho người học Việt Nam, dựng bằng [Remotion](https://www.remotion.dev/). Nhạc nền được tổng hợp hoàn toàn bằng code trong `scripts/music.py` (96 BPM, giọng Rê trưởng), không dùng nhạc có sẵn.
 
 ## Tạo lại video
 

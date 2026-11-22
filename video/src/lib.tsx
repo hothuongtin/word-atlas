@@ -232,3 +232,51 @@ export const Flash: React.FC<{ at: number; strength?: number }> = ({ at, strengt
 };
 
 export { clamp, ease };
+
+export type PointerKey = { f: number; x: number; y: number };
+
+/** Mouse pointer that glides between keyframes and shows a ripple on each click frame. */
+export const Pointer: React.FC<{ keys: PointerKey[]; clicks?: number[]; size?: number }> = ({ keys, clicks = [], size = 34 }) => {
+  const f = useCurrentFrame();
+  const fs = keys.map((k) => k.f);
+  const opt = { ...clamp, easing: Easing.inOut(Easing.cubic) };
+  const x = keys.length > 1 ? interpolate(f, fs, keys.map((k) => k.x), opt) : keys[0].x;
+  const y = keys.length > 1 ? interpolate(f, fs, keys.map((k) => k.y), opt) : keys[0].y;
+  const show = interpolate(f, [fs[0] - 8, fs[0]], [0, 1], clamp);
+  const press = clicks.reduce((m, c) => Math.max(m, interpolate(f, [c - 3, c, c + 6], [0, 1, 0], clamp)), 0);
+  return (
+    <div style={{ position: "absolute", left: 0, top: 0, pointerEvents: "none" }}>
+      {clicks.map((c) => {
+        const t = f - c;
+        if (t < 0 || t > 40) return null;
+        return [0, 10].map((d) => {
+          const r = interpolate(t - d, [0, 30], [10, 120], clamp);
+          const o = interpolate(t - d, [0, 30], [0.9, 0], clamp);
+          return (
+            <div key={`${c}-${d}`} style={{ position: "absolute", left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: "50%", border: `4px solid ${C.gold}`, opacity: o, boxShadow: `0 0 30px ${C.gold}` }} />
+          );
+        });
+      })}
+      <svg width={size} height={size * 1.35} viewBox="0 0 20 27" style={{ position: "absolute", left: x - 3, top: y - 2, opacity: show, transform: `scale(${1 - press * 0.18})`, transformOrigin: "3px 2px", filter: "drop-shadow(0 6px 10px rgba(0,0,0,.55))" }}>
+        <path d="M2 1 L2 22 L7.5 17 L11 25.5 L14.5 24 L11 15.8 L18.5 15.8 Z" fill="#fff" stroke="#0B1020" strokeWidth={1.6} strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+};
+
+/** Animated equaliser bars shown while a pronunciation plays. */
+export const Playing: React.FC<{ from: number; to: number; x: number; y: number; label?: string }> = ({ from, to, x, y, label }) => {
+  const f = useCurrentFrame();
+  const o = interpolate(f, [from, from + 6, to - 6, to], [0, 1, 1, 0], clamp);
+  if (o <= 0) return null;
+  return (
+    <div style={{ position: "absolute", left: x, top: y, opacity: o, display: "flex", alignItems: "center", gap: 12, padding: "10px 18px", borderRadius: 30, background: "rgba(11,16,32,.92)", border: `1px solid ${C.gold}`, boxShadow: "0 12px 40px rgba(0,0,0,.5)", whiteSpace: "nowrap" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 4, height: 30 }}>
+        {Array.from({ length: 7 }, (_, i) => (
+          <span key={i} style={{ width: 5, borderRadius: 3, background: C.gold, height: 8 + Math.abs(Math.sin(f / 3 + i * 1.3)) * 22 }} />
+        ))}
+      </div>
+      {label && <span style={{ fontFamily: sans, fontWeight: 600, fontSize: 22, color: C.cream }}>{label}</span>}
+    </div>
+  );
+};

@@ -15,7 +15,7 @@ SR = 48000
 BPM = 96
 BEAT = 60 / BPM
 BAR = BEAT * 4
-LEN = 62.0
+LEN = 51 * BAR + 2.0
 N = int(SR * LEN)
 rng = np.random.default_rng(7)
 L = np.zeros(N)
@@ -155,26 +155,36 @@ def whoosh(dur=1.2):
     return bp(n, 600, 5000) * e * 0.35
 
 
-# Pads all the way through, brighter in the drop.
-for bar in range(25):
+# Arrangement on a 51-bar grid that matches the scenes in src/Intro.tsx.
+BARS = 51
+DRUMS = range(7, 47)
+LIGHT = {10, 24, 34, 45, 46}  # kick on the one only
+QUIET = set(range(20, 24))  # word-audio breakdown: no drums so the pronunciations stay clear
+FULL = set(range(11, 20)) | set(range(35, 41))  # busier hats
+
+# Pads all the way through, opening up as the journey climbs.
+for bar in range(BARS + 1):
     at = bar * BAR
-    bright = 900 if bar < 4 else 1800 if bar < 14 else 3200 if bar < 20 else 2200
-    notes = chord(min(bar, 23)) if bar < 24 else [50, 57, 62, 66, 69]
-    dur = BAR + 1.0 if bar < 24 else 6.0
-    add(pad(notes, dur, bright), at, 0.22 if bar < 24 else 0.3, 0)
+    bright = 900 if bar < 7 else 1500 if bar in QUIET else 3200 if bar in range(35, 41) else 2200 if bar in FULL else 1800
+    last = bar == BARS
+    notes = [50, 57, 62, 66, 69] if last else chord(bar)
+    add(pad(notes, 6.0 if last else BAR + 1.0, bright), at, 0.3 if last else 0.22, 0)
 
 # Arpeggio (16ths) from bar 2.
 pattern = [0, 2, 3, 4, 3, 2, 1, 2]
-for bar in range(2, 22):
+for bar in range(2, BARS - 4):
     notes = chord(bar)
+    soft = bar < 7 or bar in QUIET
     for s in range(16):
         n = notes[1 + pattern[s % 8] % 4] + 12
-        add(pluck(n, 0.35, 2500 if bar < 4 else 6000), bar * BAR + s * BEAT / 4, 0.12 if bar < 4 else 0.16, -0.4 if s % 2 else 0.4)
+        add(pluck(n, 0.35, 2500 if soft else 6000), bar * BAR + s * BEAT / 4, 0.1 if soft else 0.16, -0.4 if s % 2 else 0.4)
 
-# Drums and bass from bar 4 (breakdown in bar 13 and 20-21 light).
-for bar in range(4, 22):
+# Drums and bass.
+for bar in DRUMS:
+    if bar in QUIET:
+        continue
     at = bar * BAR
-    light = bar in (13, 20, 21)
+    light = bar in LIGHT
     for b in range(4):
         tb = at + b * BEAT
         if not light or b == 0:
@@ -182,7 +192,7 @@ for bar in range(4, 22):
         if b in (1, 3) and not light:
             add(clap(), tb, 0.5, 0.1)
         add(hat(), tb + BEAT / 2, 0.5, 0.3)
-        if bar >= 14 and not light:
+        if bar in FULL and not light:
             add(hat(), tb + BEAT / 4, 0.25, -0.3)
             add(hat(), tb + 3 * BEAT / 4, 0.25, -0.3)
     root = chord(bar)[0] - 12
@@ -191,27 +201,34 @@ for bar in range(4, 22):
             break
         add(bass(root + (12 if e in (3, 7) else 0), BEAT / 2 * 0.9), at + e * BEAT / 2, 0.55)
 
-# Lead melody in the drop.
+# Bell melodies: a climbing motif during the level journey, the full lead in the galaxy drop.
 mel = [74, 76, 78, 76, 74, 71, 69, 71, 73, 74, 76, 78, 81, 78, 76, 74]
-for bar in range(14, 20):
+climb = [69, 71, 74, 76, 74, 76, 78, 81]
+for bar in range(15, 20):
+    for k in range(2):
+        add(bell(climb[((bar - 15) * 2 + k) % len(climb)], 1.8), bar * BAR + k * 2 * BEAT, 0.13, -0.2)
+for bar in range(35, 41):
     for k in range(4):
-        n = mel[((bar - 14) * 4 + k) % len(mel)]
-        add(bell(n, 1.4), bar * BAR + k * BEAT, 0.16, 0.15)
+        add(bell(mel[((bar - 35) * 4 + k) % len(mel)], 1.4), bar * BAR + k * BEAT, 0.16, 0.15)
 
-# Intro sparkle bells.
+# Intro and outro sparkle bells.
 for k, n in enumerate([81, 78, 74, 76, 81, 86]):
     add(bell(n, 2.2), 0.4 + k * 1.15, 0.12, (-1) ** k * 0.5)
+for k, n in enumerate([74, 78, 81, 86]):
+    add(bell(n, 3.0), 47 * BAR + 0.3 + k * 1.4, 0.12, (-1) ** k * 0.4)
 
-# Transitions: risers before big moments, impacts on them, whooshes on scene cuts.
-for bar in (4, 14, 22):
+# Transitions: risers before big moments, impacts on them, whooshes on scene cuts and level steps.
+for bar in (7, 11, 35, 47):
     add(riser(BAR), (bar - 1) * BAR, 0.6)
     add(impact(), bar * BAR, 0.6)
-for bar in (2, 6, 8, 10, 12, 16, 18, 20):
-    add(whoosh(1.0), bar * BAR - 0.5, 0.5)
+for t in [4, 20, 25, 28, 32, 41, 44] + [11 + 1.5 * k for k in range(1, 6)]:
+    add(whoosh(1.0), t * BAR - 0.5, 0.45)
 
 # Sidechain duck on everything but the kick (approximate from the grid).
 duck = np.ones(N)
-for bar in range(4, 22):
+for bar in DRUMS:
+    if bar in QUIET:
+        continue
     for b in range(4):
         i = int((bar * BAR + b * BEAT) * SR)
         d = int(0.28 * SR)

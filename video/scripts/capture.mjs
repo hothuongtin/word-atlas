@@ -23,7 +23,7 @@ function seed([ids, splash]) {
   localStorage.setItem("word-atlas:settings", JSON.stringify({ onboarded: true, startLevel: 2, dailyNew: 10, autoplay: false, sfx: false, splash }));
   const now = Date.now();
   const cards = Object.fromEntries(
-    ids.map((id, i) => [id, { due: i < 2 ? now - 3600000 : now + (1 + (i % 9)) * 86400000, s: i % 3 ? 8 : 40, d: 5, el: 3, sd: 6, ls: 0, reps: 4, lapses: 0, st: 2, seen: now - (10 + (i % 20)) * 86400000 }]),
+    ids.map((id, i) => [id, { due: i < 2 ? now - 3600000 : now + (1 + (i % 9)) * 86400000, s: i < 2 ? 1 : i % 3 ? 8 : 40, d: 5, el: 3, sd: 6, ls: 0, reps: 4, lapses: 0, st: 2, seen: now - (10 + (i % 20)) * 86400000 }]),
   );
   const days = {};
   for (let d = 1; d <= 12; d++) days[new Date(now - d * 86400000).toISOString().slice(0, 10)] = { n: 10, r: 18, c: 24, t: 900 };
@@ -63,6 +63,15 @@ async function clip(page, name, run, scale) {
 }
 
 const desk = { width: 1600, height: 900 };
+// Screen positions (CSS px) of buttons the video's cursor clicks.
+const boxes = {};
+const speakBoxes = (page) =>
+  page.$$eval(".speak", (els) =>
+    els.map((e) => {
+      const r = e.getBoundingClientRect();
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2, label: e.getAttribute("aria-label") };
+    }),
+  );
 
 // Splash as a clip.
 {
@@ -85,7 +94,17 @@ const desk = { width: 1600, height: 900 };
   // Two seeded cards are due, so the session opens with recall quizzes before new words.
   for (let k = 0; k < 2 && (await page.locator(".learn-stage button.option").count()); k++) {
     await shot(page, `quiz-${k}`);
-    await page.locator(".learn-stage button.option").first().click();
+    const answerId = await page.evaluate(() => {
+      const s = JSON.parse(localStorage.getItem("word-atlas:v2:word-atlas-open") || "{}").session;
+      return s?.steps?.[s.index]?.id ?? null;
+    });
+    const right = page.locator(`.learn-stage button.option[data-option="${answerId}"]`);
+    const pick = answerId && (await right.count()) ? right : page.locator(".learn-stage button.option").first();
+    boxes[`quiz-${k}`] = await pick.evaluate((e) => {
+      const r = e.getBoundingClientRect();
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+    });
+    await pick.click();
     await wait(1200);
     await shot(page, `quiz-${k}-done`);
     await page.keyboard.press("Enter");
@@ -110,9 +129,11 @@ const desk = { width: 1600, height: 900 };
   await page.goto(new URL("#/atlas?w=environment", app).href, { waitUntil: "networkidle" });
   await wait(2500);
   await shot(page, "word");
+  boxes.word = await speakBoxes(page);
   await page.locator(".sheet").evaluate((e) => e.scrollTo(0, 520));
   await wait(800);
   await shot(page, "word-2");
+  boxes["word-2"] = await speakBoxes(page);
   await page.goto(new URL("#/practice", app).href, { waitUntil: "networkidle" });
   await wait(1800);
   await shot(page, "practice");
@@ -159,4 +180,5 @@ const desk = { width: 1600, height: 900 };
   await shot(page, "m-galaxy");
   await ctx.close();
 }
+fs.writeFileSync(path.join(out, "boxes.json"), JSON.stringify(boxes, null, 1));
 await browser.close();
