@@ -638,6 +638,26 @@ code {
     display: none;
   }
 }
+/* Vietnamese labels run longer: keep the top bar inside narrow and tablet widths. */
+@media (max-width: 374px) {
+  .topbar {
+    gap: 8px;
+  }
+  .logo {
+    gap: 8px;
+  }
+  .logo-text b {
+    font-size: 17px;
+  }
+}
+@media (max-width: 339px) {
+  .topbar {
+    padding: 0 14px;
+  }
+  .logo-text b {
+    font-size: 16px;
+  }
+}
 @media (max-width: 480px) {
   .segmented button {
     padding: 0 10px;
@@ -651,6 +671,7 @@ code {
 }
 .topnav a {
   position: relative;
+  white-space: nowrap;
   height: 38px;
   padding: 0 14px;
   display: grid;
@@ -721,6 +742,29 @@ code {
   }
   .hide-sm {
     display: none;
+  }
+}
+
+@media (min-width: 760px) and (max-width: 1099px) {
+  .logo-text small {
+    display: none;
+  }
+  .search-pill {
+    min-width: 0;
+    padding: 0 11px;
+    margin-right: 0;
+  }
+  .search-pill span,
+  .search-pill kbd {
+    display: none;
+  }
+}
+@media (min-width: 760px) and (max-width: 899px) {
+  .logo-text {
+    display: none;
+  }
+  .topnav a {
+    padding: 0 10px;
   }
 }
 
@@ -2080,6 +2124,7 @@ code {
 }
 .filters {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-bottom: 22px;
   position: relative;
@@ -3910,12 +3955,13 @@ a:hover .mark-needle,
   top: 0;
   left: 16px;
   right: 16px;
-  bottom: calc(max(11vh, 72px) + 40px);
+  /* leave room for the welcome line and hint below, which can wrap to two lines on phones */
+  bottom: calc(max(11vh, 72px) + 80px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(16px, 3vmin, 28px);
+  gap: clamp(10px, 3vmin, 28px);
   text-align: center;
   pointer-events: none;
   transition:
@@ -3923,11 +3969,16 @@ a:hover .mark-needle,
     transform 1s var(--ease),
     filter 0.5s;
 }
+@media (max-width: 479px) {
+  .splash-brand {
+    bottom: calc(max(11vh, 72px) + 104px);
+  }
+}
 .splash-emblem {
   /* The compass sits on the dark doors whatever the app theme is. */
   --terra: #e57c5a;
   --paper: #151b2e;
-  width: clamp(108px, 22vmin, 156px);
+  width: clamp(64px, 22vmin, 156px);
   aspect-ratio: 1;
   color: #f3ecdf;
   opacity: 0;
@@ -3967,7 +4018,7 @@ a:hover .mark-needle,
 }
 .splash-name {
   margin: 0;
-  font: 600 clamp(44px, 5.6vw + 22px, 100px) / 1.1 var(--serif);
+  font: 600 clamp(36px, min(5.6vw + 22px, 14vh), 100px) / 1.1 var(--serif);
   letter-spacing: -0.01em;
   text-wrap: balance;
   filter: drop-shadow(0 0 24px rgba(230, 180, 87, 0.25));
