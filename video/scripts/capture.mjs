@@ -94,16 +94,23 @@ const speakBoxes = (page) =>
   // Two seeded cards are due, so the session opens with recall quizzes before new words.
   for (let k = 0; k < 2 && (await page.locator(".learn-stage button.option").count()); k++) {
     await shot(page, `quiz-${k}`);
-    const answerId = await page.evaluate(() => {
+    const step = await page.evaluate(() => {
       const s = JSON.parse(localStorage.getItem("word-atlas:v2:word-atlas-open") || "{}").session;
-      return s?.steps?.[s.index]?.id ?? null;
+      return s?.steps?.[s.index] ?? null;
     });
+    const answerId = step?.id ?? null;
+    // A listening quiz asks with the word's audio, so the video needs that clip too.
+    if (step?.kind === "listen") {
+      fs.mkdirSync(path.join(here, "public", "voice"), { recursive: true });
+      fs.copyFileSync(path.join(repo, "public", "atlas", "audio", "uk", `${answerId}.mp3`), path.join(here, "public", "voice", `quiz-${k}.mp3`));
+    }
     const right = page.locator(`.learn-stage button.option[data-option="${answerId}"]`);
     const pick = answerId && (await right.count()) ? right : page.locator(".learn-stage button.option").first();
     boxes[`quiz-${k}`] = await pick.evaluate((e) => {
       const r = e.getBoundingClientRect();
       return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
     });
+    boxes[`quiz-${k}`].kind = step?.kind ?? null;
     await pick.click();
     await wait(1200);
     await shot(page, `quiz-${k}-done`);

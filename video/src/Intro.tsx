@@ -12,7 +12,7 @@ const nf = (n: number) => n.toLocaleString("vi-VN");
 const start = (bar: number) => Math.max(0, bar * BAR - X);
 
 type Box = { x: number; y: number };
-const B = boxes as unknown as Record<string, Box | Box[]>;
+const B = boxes as unknown as Record<string, (Box & { kind?: string }) | Box[]>;
 const box = (k: string, i = 0, fb: Box = { x: 800, y: 450 }): Box => {
   const v = B[k];
   return (Array.isArray(v) ? v[i] : v) ?? fb;
@@ -429,6 +429,13 @@ const Learn = () => {
         </At>
       </Camera>
       <Vignette />
+      {Q.map((x) =>
+        (B[x.shot] as { kind?: string } | undefined)?.kind === "listen" ? (
+          <Sequence key={x.shot} from={x.from + 12} durationInFrames={45} layout="none">
+            <Audio src={voice(x.shot)} />
+          </Sequence>
+        ) : null,
+      )}
       {Q.map((x) => (
         <Sequence key={x.click} from={x.click} durationInFrames={45} layout="none">
           <Audio src={voice("correct")} volume={0.7} />
