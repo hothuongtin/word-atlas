@@ -100,7 +100,7 @@ const speakBoxes = (page) =>
     });
     const answerId = step?.id ?? null;
     // A listening quiz asks with the word's audio, so the video needs that clip too.
-    if (step?.kind === "listen") {
+    if (step?.kind === "listen" && index.words.some((w) => w[0] === answerId)) {
       fs.mkdirSync(path.join(here, "public", "voice"), { recursive: true });
       fs.copyFileSync(path.join(repo, "public", "atlas", "audio", "uk", `${answerId}.mp3`), path.join(here, "public", "voice", `quiz-${k}.mp3`));
     }
