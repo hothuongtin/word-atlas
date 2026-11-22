@@ -1,0 +1,8 @@
+.frames/
+out/
+public/capture/
+public/words/
+public/brand/
+public/music.wav
+public/splash-voice.mp3
+src/words.json

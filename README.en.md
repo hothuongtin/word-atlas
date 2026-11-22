@@ -82,6 +82,8 @@ npm run build        # Production build in dist/
 
 For a subpath deployment: `ATLAS_BASE=/words/ npm run build`. See the [deployment guide](docs/deployment.md).
 
+A Full HD intro video for the app (Remotion, with a synthesized soundtrack) lives in [`video/`](video/README.md).
+
 **Stack:** React 19 · TypeScript · Vite · ts-fsrs · WebGL2
 
 ## Open dataset

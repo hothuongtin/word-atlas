@@ -105,6 +105,8 @@ npm run build        # Build vào thư mục dist/
 
 Triển khai dưới đường dẫn con: `ATLAS_BASE=/words/ npm run build`. Xem chi tiết trong [tài liệu triển khai](docs/deployment.md).
 
+Video giới thiệu app (Remotion, Full HD, nhạc tự tổng hợp) nằm trong thư mục [`video/`](video/README.md).
+
 **Công nghệ:** React 19 · TypeScript · Vite · ts-fsrs · WebGL2
 
 ## Dữ liệu mở
