@@ -649,6 +649,7 @@ const VOICES: [number, number][] = [
   ...[0, 1, 2, 3, 4, 5].map((k): [number, number] => [start(11) + arrive(k) + 26, 36]),
   [start(20) + WORD_CLICK, 44],
   [start(20) + EX_CLICK, 104],
+  ...Q.filter((x) => (B[x.shot] as { kind?: string } | undefined)?.kind === "listen").map((x): [number, number] => [start(28) + x.from + 12, 40]),
 ];
 const musicVolume = (f: number) =>
   VOICES.reduce((v, [a, d]) => Math.min(v, interpolate(f, [a - 6, a + 2, a + d, a + d + 12], [1, 0.4, 0.4, 1], clamp)), 1);
