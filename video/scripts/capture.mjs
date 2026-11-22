@@ -23,10 +23,10 @@ function seed([ids, splash]) {
   localStorage.setItem("word-atlas:settings", JSON.stringify({ onboarded: true, startLevel: 2, dailyNew: 10, autoplay: false, sfx: false, splash }));
   const now = Date.now();
   const cards = Object.fromEntries(
-    ids.map((id, i) => [id, { due: now + (1 + (i % 9)) * 86400000, s: i % 3 ? 8 : 40, d: 5, el: 3, sd: 6, ls: 0, reps: 4, lapses: 0, st: 2, seen: now - (10 + (i % 20)) * 86400000 }]),
+    ids.map((id, i) => [id, { due: i < 2 ? now - 3600000 : now + (1 + (i % 9)) * 86400000, s: i % 3 ? 8 : 40, d: 5, el: 3, sd: 6, ls: 0, reps: 4, lapses: 0, st: 2, seen: now - (10 + (i % 20)) * 86400000 }]),
   );
   const days = {};
-  for (let d = 1; d <= 12; d++) days[new Date(now - d * 86400000).toISOString().slice(0, 10)] = { n: 10, r: 18, ok: 24, t: 900 };
+  for (let d = 1; d <= 12; d++) days[new Date(now - d * 86400000).toISOString().slice(0, 10)] = { n: 10, r: 18, c: 24, t: 900 };
   localStorage.setItem("word-atlas:v2:word-atlas-open", JSON.stringify({ version: 2, datasetId: "word-atlas-open", cards, bookmarks: [], days, typing: [], session: null, mistakes: [] }));
   sessionStorage.setItem("seeded", "1");
 }
@@ -82,10 +82,17 @@ const desk = { width: 1600, height: 900 };
   await shot(page, "today");
   await page.getByRole("button", { name: /Bắt đầu hành trình hôm nay|Đi tiếp hành trình/ }).first().click();
   await wait(2600);
+  // Two seeded cards are due, so the session opens with recall quizzes before new words.
+  for (let k = 0; k < 2 && (await page.locator(".learn-stage button.option").count()); k++) {
+    await shot(page, `quiz-${k}`);
+    await page.locator(".learn-stage button.option").first().click();
+    await wait(1200);
+    await shot(page, `quiz-${k}-done`);
+    await page.keyboard.press("Enter");
+    await wait(1800);
+  }
   for (let i = 0; i < 4; i++) {
     await shot(page, `learn-${i}`);
-    const opts = await page.locator(".learn-stage button.option, .learn-stage .options button").count();
-    if (opts) break;
     await page.keyboard.press("Enter");
     await wait(1800);
   }
