@@ -1,26 +1,26 @@
-# 参与贡献 / Contributing
+# Tham gia đóng góp / Contributing
 
-谢谢你愿意让词光变得更好。
+Cảm ơn bạn đã muốn giúp 7000 Từ IELTS tốt hơn.
 
-## 修正词条
+## Sửa mục từ
 
-最有价值的贡献是纠错。请在 Issue 中写明词条 `id`、问题和建议的改法，或直接提交 PR：
+Đóng góp có giá trị nhất là sửa lỗi. Hãy ghi rõ `id` của mục từ, vấn đề và cách sửa đề xuất trong Issue, hoặc gửi trực tiếp một PR:
 
-1. 修改 `.local` 之外的源数据前，请先看 [docs/pipeline.md](docs/pipeline.md)。小修正可以直接改 `data/word-atlas.json` 与 `public/atlas/entries/` 中对应的条目，保持两处一致。
-2. 运行 `npm run check:atlas` 和 `npm test`。
-3. 在 PR 里说明修改理由，必要时附权威词典链接。
+1. Trước khi sửa dữ liệu nguồn ngoài `.local`, hãy đọc [docs/pipeline.md](docs/pipeline.md). Với sửa nhỏ, bạn có thể chỉnh trực tiếp mục tương ứng trong `data/word-atlas.json` và `public/atlas/entries/`, và giữ hai nơi nhất quán với nhau.
+2. Chạy `npm run check:atlas` và `npm test`.
+3. Nêu lý do sửa trong PR, khi cần thì đính kèm liên kết tới từ điển uy tín.
 
-## 代码
+## Mã nguồn
 
-- TypeScript 严格模式，React 函数组件，不引入状态管理或 UI 框架依赖。
-- 保持“无账号、本地优先、无追踪”的方向。
-- 视觉改动请同时检查浅色、深色和 375px 手机宽度。
-- 提交前运行 `npm test`、`npm run check:atlas`、`npm run build`。
+- TypeScript chế độ strict, React function component. Không thêm phụ thuộc vào thư viện quản lý state hay UI framework.
+- Giữ định hướng “không cần tài khoản, ưu tiên chạy cục bộ, không theo dõi”.
+- Với thay đổi giao diện, hãy kiểm tra cả giao diện sáng, giao diện tối và chiều rộng màn hình điện thoại 375px.
+- Trước khi commit, chạy `npm test`, `npm run check:atlas` và `npm run build`.
 
-## 新素材
+## Tài nguyên mới
 
-新增图片、录音或文本时，请写明来源与授权，只接受可以按 CC BY 4.0 再分发的内容。
+Khi thêm hình ảnh, bản ghi âm hoặc văn bản mới, hãy ghi rõ nguồn và giấy phép. Chỉ nhận nội dung có thể phân phối lại theo CC BY 4.0.
 
-## 安全
+## Bảo mật
 
-不要在 Issue、PR、截图或日志中粘贴任何 API key。生成脚本只从环境变量或仓库外的文件读取凭据，见 [SECURITY.md](SECURITY.md)。
+Không dán bất kỳ API key nào vào Issue, PR, ảnh chụp màn hình hay nhật ký. Script tạo nội dung chỉ đọc thông tin xác thực từ biến môi trường hoặc tệp nằm ngoài repo, xem [SECURITY.md](SECURITY.md).

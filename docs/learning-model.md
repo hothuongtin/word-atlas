@@ -1,32 +1,32 @@
-# 学习模型 / Learning model
+# Mô hình học / Learning model
 
-## 每日旅程
+## Hành trình mỗi ngày
 
-- **复习**：所有到期的词（FSRS 计算的 `due` 已过）。
-- **新词**：每天上限可设（默认 10），从学习路线中你的起点难度开始取未学过的词。
-- 顺序：先复习，再以 5 个为一组学新词：先「初见」认识 5 个词，再打乱顺序回忆这 5 个词。
+- **Ôn tập**: tất cả các từ đến hạn (thời điểm `due` do FSRS tính đã qua).
+- **Từ mới**: giới hạn mỗi ngày có thể đặt (mặc định 10), lấy các từ chưa học theo lộ trình học, bắt đầu từ mức độ khó xuất phát của bạn.
+- Thứ tự: ôn tập trước, rồi học từ mới theo nhóm 5 từ: trước tiên làm quen với 5 từ (Làm quen), sau đó xáo trộn thứ tự và nhớ lại 5 từ đó.
 
-## 题型
+## Dạng bài
 
-| 题型 | 适用 | 说明 |
+| Dạng bài | Áp dụng cho | Mô tả |
 | --- | --- | --- |
-| 选义 | 新词、记忆弱 | 看英文选中文，干扰项词性相同 |
-| 看图补句 | 新词、记忆弱 | 插画 + 挖空例句，选英文词，干扰项拼写相近 |
-| 听音辨词 | 各阶段 | 只听发音选词 |
-| 拼写 | 稳定度较高 | 看图和释义拼写，可以逐字母提示（提示后最多计 Hard） |
+| Chọn nghĩa | Từ mới, trí nhớ còn yếu | Xem tiếng Anh, chọn nghĩa tiếng Việt. Các đáp án nhiễu cùng từ loại. |
+| Xem tranh điền câu | Từ mới, trí nhớ còn yếu | Tranh minh họa cùng câu ví dụ bị khuyết, chọn từ tiếng Anh. Các đáp án nhiễu có chính tả gần giống. |
+| Nghe phát âm chọn từ | Mọi giai đoạn | Chỉ nghe phát âm rồi chọn từ. |
+| Đánh vần | Độ bền ghi nhớ khá cao | Xem tranh và nghĩa rồi đánh vần từ. Có thể gợi ý từng chữ cái (sau khi gợi ý, tối đa tính là Hard). |
 
-## 评分与 FSRS
+## Chấm điểm và FSRS
 
-每个词在一轮中只有**第一次作答**更新记忆（ts-fsrs，FSRS-6，默认目标记忆率 90%）：
+Trong một vòng ôn, chỉ **lần trả lời đầu tiên** của mỗi từ mới cập nhật bộ nhớ (ts-fsrs, FSRS-6, tỉ lệ ghi nhớ mục tiêu mặc định 90%):
 
-- 答错 → Again
-- 答对但慢、或用了提示 → Hard
-- 答对 → Good；拼写又快又对 → Easy
+- Trả lời sai → Again
+- Trả lời đúng nhưng chậm, hoặc đã dùng gợi ý → Hard
+- Trả lời đúng → Good; đánh vần vừa nhanh vừa đúng → Easy
 
-答错的词会在几题之后换一种题型再练一次（最多两次），重试不再评分，也不计入正确率。
+Từ trả lời sai sẽ được luyện lại bằng một dạng bài khác sau vài câu (tối đa hai lần). Lần luyện lại không được chấm điểm và không tính vào tỉ lệ đúng.
 
-「已掌握」= FSRS 复习状态且记忆稳定度 ≥ 21 天。
+"Đã thuộc" = đang ở trạng thái ôn tập của FSRS và độ bền ghi nhớ ≥ 21 ngày.
 
-## 打字练习
+## Luyện gõ
 
-打字只训练输出，不改变记忆状态。WPM 按每 5 个正确字符计 1 词。
+Luyện gõ chỉ rèn kỹ năng viết ra, không thay đổi trạng thái ghi nhớ. WPM tính theo cứ mỗi 5 ký tự đúng là 1 từ.

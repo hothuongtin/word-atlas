@@ -1,6 +1,6 @@
-# Word Atlas 词库
+# Bộ từ 7000 Từ IELTS
 
-- `word-atlas.json`：完整结构化数据
-- `word-atlas.csv`：表格版
+- `word-atlas.json`: dữ liệu có cấu trúc đầy đủ
+- `word-atlas.csv`: bản dạng bảng
 
-字段说明：[../docs/dataset.md](../docs/dataset.md)。授权：CC BY 4.0，署名 “Word Atlas contributors”。
+Mô tả trường: [../docs/dataset.md](../docs/dataset.md). Giấy phép: CC BY 4.0, ghi công “Word Atlas contributors”.
